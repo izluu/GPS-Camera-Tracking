@@ -70,5 +70,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.6")
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3'
+    implementation "com.airbnb.android:lottie:6.3.0"
+
 
 }

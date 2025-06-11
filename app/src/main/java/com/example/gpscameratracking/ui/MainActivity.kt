@@ -36,6 +36,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+        binding.btnMyPhotos.setOnClickListener {
+            val intent = Intent(this, MyPhotoActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
 
     }
