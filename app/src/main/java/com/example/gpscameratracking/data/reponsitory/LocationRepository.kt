@@ -17,6 +17,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import java.io.IOException
+import java.util.Locale
 
 class LocationRepository(private val context: Context) {
     private val client: FusedLocationProviderClient =
@@ -37,7 +38,7 @@ class LocationRepository(private val context: Context) {
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
         android.util.Log.d("LocationRepository", "Has location permission: $hasPermission")
-        
+
         if (!hasPermission) {
             android.util.Log.d("LocationRepository", "Permission not granted")
             locationCallBack.onLocationError("Permission not granted")
@@ -47,7 +48,7 @@ class LocationRepository(private val context: Context) {
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val isGPSEnable = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         val isNetworkEnable = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-        
+
         android.util.Log.d("LocationRepository", "GPS enabled: $isGPSEnable")
         android.util.Log.d("LocationRepository", "Network enabled: $isNetworkEnable")
 
@@ -67,7 +68,7 @@ class LocationRepository(private val context: Context) {
         context.startActivity(intent)
     }
 
-    @SuppressLint("SimpleDateFormat")
+    @SuppressLint("SimpleDateFormat", "DefaultLocale")
     fun getDetailsFromLocation(location: android.location.Location): Location {
         val geocoder = Geocoder(context)
         var addresses = ArrayList<Address>()
@@ -86,11 +87,19 @@ class LocationRepository(private val context: Context) {
         val timeFormat = java.text.SimpleDateFormat("HH:mm:ss")
         val date = java.util.Date(System.currentTimeMillis())
         val locationDetails = address?.getAddressLine(0) ?: "Unknown Location"
+        val finalAddress = locationDetails.split(",").map { it.trim() }
+        val result = if (finalAddress.size > 2) {
+            finalAddress.subList(1, finalAddress.size - 1).joinToString(", ")
+        } else {
+            locationDetails
+        }
+        val lon = String.format(Locale.US, "%.3f", location.longitude).toDouble()
+        val lat = String.format(Locale.US, "%.3f", location.latitude).toDouble()
         return Location(
-            locationDetails,
+            result,
             "",
-            location.latitude,
-            location.longitude,
+            lat,
+            lon,
             dateFormat.format(date),
             timeFormat.format(date)
         )
@@ -98,9 +107,7 @@ class LocationRepository(private val context: Context) {
 
     @SuppressLint("MissingPermission")
     fun getLocationDetails(locationCallBack: LocationCallback) {
-        android.util.Log.d("LocationRepository", "getLocationDetails called")
         if (!checkLocation(locationCallBack)) {
-            android.util.Log.d("LocationRepository", "Location check failed")
             return
         }
         android.util.Log.d("LocationRepository", "Requesting location updates")
@@ -110,13 +117,9 @@ class LocationRepository(private val context: Context) {
                 override fun onLocationResult(p0: LocationResult) {
                     val location = p0.lastLocation
                     if (location != null) {
-                        android.util.Log.d("LocationRepository", "Location received: ${location.latitude}, ${location.longitude}")
-                        android.util.Log.d("LocationRepository", "Accuracy: ${location.accuracy} meters")
-                        android.util.Log.d("LocationRepository", "Provider: ${location.provider}")
                         val locationDetails = getDetailsFromLocation(location)
                         locationCallBack.onLocationUpdate(locationDetails)
                     } else {
-                        android.util.Log.d("LocationRepository", "Location is null")
                         locationCallBack.onLocationError("Location is null")
                         openLocationSetting()
                     }

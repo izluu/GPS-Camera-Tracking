@@ -19,7 +19,6 @@ import androidx.camera.view.PreviewView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -103,17 +102,16 @@ class PhotoRepository(private val context: Context, private val lifecycleScope: 
                             val canvas = Canvas(combineBitmap)
                             canvas.drawBitmap(captureBitmap, 0f, 0f, null)
 
-                            val scaleFactor = 3.5f
-                            val card1 = PointF(0f, 2480f)
-                            val card2 = PointF(800f, 2480f)
+                            val scaleFactor = 3f
+                            val card1 = PointF(100f, 2400f)
+                            val card2 = PointF(1000f,2400f)
                             drawCardOnCanvas(cv1, canvas, scaleFactor, card1)
-                            drawCardOnCanvas(cv2, canvas, scaleFactor, card2)
+                            drawCardOnCanvas(cv2, canvas, 3f, card2)
 
                             supportMapFragment.getMapAsync { googleMap ->
                                 googleMap.snapshot { bitmap ->
                                     if (bitmap != null) {
                                         drawMapOnCanvas(bitmap, canvas, scaleFactor, card1)
-
                                         lifecycleScope.launch {
                                             val uid =
                                                 Firebase.auth.currentUser?.uid ?: return@launch

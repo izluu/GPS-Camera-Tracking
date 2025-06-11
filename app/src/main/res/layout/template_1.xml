@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#88000000">
+    >
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_gps"
         android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_height="160dp"
         android:layout_marginStart="5dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,12 +21,12 @@
         <FrameLayout
             android:id="@+id/fragment_gps"
             android:layout_width="150dp"
-            android:layout_height="150dp" />
+            android:layout_height="160dp" />
     </androidx.cardview.widget.CardView>
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_location"
         android:layout_width="0dp"
-        android:layout_height="150dp"
+        android:layout_height="160dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
         app:layout_constraintTop_toTopOf="parent"
@@ -38,27 +38,29 @@
         app:cardElevation="4dp">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="4dp">
+            android:layout_height="160dp">
             <TextView
                 android:id="@+id/tv_location_details"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
+                android:layout_height="30dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="address"
                 android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:textDirection="ltr" />
+                android:textSize="13sp"
+                android:textDirection="ltr"
+                android:maxLines="2"/>
             <TextView
                 android:id="@+id/tv_note"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
+                android:layout_height="25dp"
                 app:layout_constraintTop_toBottomOf="@+id/tv_location_details"
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="note"
+                android:layout_marginTop="2dp"
                 android:textColor="#FFFFFF"
-                android:textSize="16sp"
+                android:textSize="13sp"
+                android:maxLines="2"
                 android:textDirection="ltr"/>
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -68,13 +70,15 @@
                 <LinearLayout
                     android:id="@+id/ln_1"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     android:orientation="horizontal"
                     android:weightSum="2"
+                    android:layout_marginTop="4dp"
                     tools:ignore="DisableBaselineAlignment">
                    <LinearLayout
+                       android:background="@drawable/white_border"
                        android:layout_width="0dp"
                        android:layout_height="match_parent"
                        android:layout_weight="1"
@@ -99,6 +103,7 @@
                            android:textDirection="ltr"/>
                    </LinearLayout>
                     <LinearLayout
+                        android:background="@drawable/white_border"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -125,6 +130,7 @@
 
                 </LinearLayout>
                 <LinearLayout
+
                     android:id="@+id/ln_2"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
@@ -134,6 +140,7 @@
                     android:weightSum="2"
                     tools:ignore="DisableBaselineAlignment">
                     <LinearLayout
+                        android:background="@drawable/white_border"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -158,6 +165,7 @@
                             android:textDirection="ltr"/>
                     </LinearLayout>
                     <LinearLayout
+                        android:background="@drawable/white_border"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"

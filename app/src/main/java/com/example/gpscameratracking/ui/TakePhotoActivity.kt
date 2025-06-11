@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -22,8 +23,8 @@ import com.example.gpscameratracking.ultils.CameraUtils
 class TakePhotoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTakePhotoBinding
     private lateinit var cameraUltils: CameraUtils
-    private var isFrontCamera = true
-    private var isFlashOn = true
+    private var isFrontCamera = false
+    private var isFlashOn = false
     private lateinit var activityViewModel: TakePhotoActivityViewModel
     private lateinit var gpsFragment: GPSFragment
 
@@ -53,26 +54,44 @@ class TakePhotoActivity : AppCompatActivity() {
         setOnClick()
     }
 
+    @SuppressLint("InflateParams")
     private fun setOnClick() {
+        binding.btnBack.setOnClickListener {
+            val intent = android.content.Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+        binding.btnNote.setOnClickListener {
+            val noteDialog = LayoutInflater.from(this).inflate(R.layout.dialog_note, null)
+            val dialog = androidx.appcompat.app.AlertDialog.Builder(this)
+                .setView(noteDialog)
+                .create()
+            val edtInput = noteDialog.findViewById<android.widget.EditText>(R.id.edtInput)
+            val btnSubmit = noteDialog.findViewById<android.widget.Button>(R.id.btnSubmit)
+            btnSubmit.setOnClickListener {
+                val note = edtInput.text.toString()
+                binding.layoutLocationInfo.tvNote.text = note
+                dialog.dismiss()
+            }
+            dialog.show()
+        }
         binding.btnChangeCamera.setOnClickListener {
             isFrontCamera = !isFrontCamera
-            cameraUltils.bindCamera(
-                ProcessCameraProvider.getInstance(this).get(),
-                binding.previewView,
-                this,
-                isFrontCamera,
-                isFlashOn
-            )
+            if (isFrontCamera) {
+                binding.btnChangeCamera.setImageResource(R.drawable.front_cam_icon)
+            } else {
+                binding.btnChangeCamera.setImageResource(R.drawable.camera_change_icon_main_activity)
+            }
+            setupCamera()
         }
         binding.flash.setOnClickListener {
             isFlashOn = !isFlashOn
-            cameraUltils.bindCamera(
-                ProcessCameraProvider.getInstance(this).get(),
-                binding.previewView,
-                this,
-                isFrontCamera,
-                isFlashOn
-            )
+            if (isFlashOn) {
+                binding.flash.setImageResource(R.drawable.flash_on_icon)
+            } else {
+                binding.flash.setImageResource(R.drawable.flash_light_icon_main_activity)
+            }
+            setupCamera()
         }
         binding.btnCapture.setOnClickListener {
             cameraUltils.takePhoto(
